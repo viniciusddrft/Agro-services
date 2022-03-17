@@ -1,4 +1,7 @@
+import 'package:agro_services/src/routes/routes.dart';
 import 'package:flutter/material.dart';
+
+import 'src/home/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,25 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 153, 219, 77),
-        title: const Text('Agro Services'),
-      ),
+      onGenerateRoute: Routes.routes,
     );
   }
 }
