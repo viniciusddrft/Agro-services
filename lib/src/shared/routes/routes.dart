@@ -1,7 +1,8 @@
-import 'package:agro_services/src/cadastro/cadastro.dart';
-import 'package:agro_services/src/home/home_page.dart';
-import 'package:agro_services/src/login/login.dart';
 import 'package:flutter/material.dart';
+
+import '../../modules/cadastro/cadastro_page.dart';
+import '../../modules/home/home_page.dart';
+import '../../modules/login/login_page.dart';
 
 class Routes {
   static Route<dynamic>? routes(RouteSettings settings) {

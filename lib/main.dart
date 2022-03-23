@@ -1,7 +1,6 @@
-import 'package:agro_services/src/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-import 'src/home/home_page.dart';
+import 'src/shared/routes/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(),
+      initialRoute: '/cadastro',
       onGenerateRoute: Routes.routes,
     );
   }
