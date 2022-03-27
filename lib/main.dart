@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: '/cadastro',
+      initialRoute: '/home',
       onGenerateRoute: Routes.routes,
     );
   }
