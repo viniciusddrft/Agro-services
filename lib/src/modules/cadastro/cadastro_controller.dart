@@ -42,7 +42,7 @@ class CadastroController {
 
   void cadastro(BuildContext context) {
     if (formKey.currentState!.validate()) {
-      apiRepository.cadastro();
+      //apiRepository.register();
       Navigator.pushNamed(context, '/login');
     }
   }

@@ -8,12 +8,47 @@ class ApiRepository implements ApiInterface {
   const ApiRepository(this.serviceWebRequestInterface);
 
   @override
-  void cadastro() {
-    serviceWebRequestInterface.get('https://www.google.com.br/');
+  void addProducts(Map<String, dynamic> json) {
+    // TODO: implement addProducts
   }
 
   @override
-  void login() {
-    serviceWebRequestInterface.get('https://www.google.com.br/');
+  void addServices(Map<String, dynamic> json) {
+    // TODO: implement addServices
+  }
+
+  @override
+  void deleteProducts(Map<String, dynamic> json) {
+    // TODO: implement deleteProducts
+  }
+
+  @override
+  void deleteServices(Map<String, dynamic> json) {
+    // TODO: implement deleteServices
+  }
+
+  @override
+  void getProducts(Map<String, dynamic> json) {
+    // TODO: implement getProducts
+  }
+
+  @override
+  void getServices(Map<String, dynamic> json) {
+    // TODO: implement getServices
+  }
+
+  @override
+  void login(Map<String, dynamic> json) {
+    // TODO: implement login
+  }
+
+  @override
+  void purchase(Map<String, dynamic> json) {
+    // TODO: implement purchase
+  }
+
+  @override
+  void register(Map<String, dynamic> json) {
+    // TODO: implement register
   }
 }

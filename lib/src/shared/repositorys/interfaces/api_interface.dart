@@ -5,7 +5,21 @@ abstract class ApiInterface {
 
   const ApiInterface(this.serviceWebRequestInterface);
 
-  void login();
+  void login(Map<String, dynamic> json);
 
-  void cadastro();
+  void register(Map<String, dynamic> json);
+
+  void purchase(Map<String, dynamic> json);
+
+  void getProducts(Map<String, dynamic> json);
+
+  void addProducts(Map<String, dynamic> json);
+
+  void deleteProducts(Map<String, dynamic> json);
+
+  void getServices(Map<String, dynamic> json);
+
+  void addServices(Map<String, dynamic> json);
+
+  void deleteServices(Map<String, dynamic> json);
 }
