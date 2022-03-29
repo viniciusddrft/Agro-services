@@ -1,7 +1,13 @@
-# Em breve Documentação
+# Autores
+Camilla Carvalho de Jesus ✨<br> 
+GitHub: https://github.com/Camilla-Carvalho
 
-feito por:
+Vinícius Dadário de Freitas ✨<br>
+GitHub: https://github.com/viniciusddrft
 
-Camilla Carvalho de Jesus
-João Vinicius Bozoni
-Vinícius Dadario de Freitas
+João Vinícius Bozoni ✨<br>
+GitHub: https://github.com/JoaoKoyaga
+
+
+<br><br>
+Documentação em breve!
