@@ -1,17 +1,18 @@
+import 'package:agro_services/src/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
-import '../mercadorias/mercadorias_interface.dart';
+import '../mercadorias/tipos_de_mercadorias.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool isLogged = true;
-  final PageController pageController = PageController(viewportFraction: 0.8);
+  final PageController _pageController = PageController(viewportFraction: 0.8);
+  final HomeController _homeController = HomeController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(Icons.account_circle_rounded),
             ),
           ),
+          IconButton(
+            onPressed: () => Navigator.pushNamed(context, '/carrinho',
+                arguments: _homeController.numberOfItemsInCart.value),
+            icon: const Icon(Icons.shopping_cart),
+          ),
           Padding(
-            padding: const EdgeInsets.only(right: 25),
-            child: IconButton(
-              onPressed: () => Navigator.pushNamed(context, '/carrinho'),
-              icon: const Icon(Icons.shopping_cart),
+            padding: const EdgeInsets.only(top: 5, right: 20),
+            child: ValueListenableBuilder(
+              valueListenable: _homeController.numberOfItemsInCart,
+              builder: (BuildContext context, int value, Widget? child) =>
+                  _homeController.numberOfItemsInCart.value > 0
+                      ? Text('$value')
+                      : Container(),
             ),
           )
         ],
@@ -91,19 +100,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 350,
                 child: GestureDetector(
                   onTap: () {
-                    pageController.animateToPage(1,
+                    _pageController.animateToPage(1,
                         duration: const Duration(seconds: 1),
                         curve: Curves.easeInOutCubicEmphasized);
                   },
                   onDoubleTap: () {
-                    pageController.animateToPage(0,
+                    _pageController.animateToPage(0,
                         duration: const Duration(seconds: 1),
                         curve: Curves.easeInOutCubicEmphasized);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: PageView(
-                      controller: pageController,
+                      controller: _pageController,
                       children: [
                         Image.asset('assets/logo.png'),
                         Image.asset('assets/logo.png'),
@@ -142,7 +151,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),
@@ -169,7 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),
@@ -196,7 +209,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),
@@ -238,7 +253,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),
@@ -265,7 +282,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),
@@ -292,7 +311,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _homeController.addToCart();
+                                },
                                 child: const Center(
                                   child: Text('Carrinho'),
                                 ),

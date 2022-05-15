@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'cadastro_controller.dart';
 
 class CadastroPage extends StatefulWidget {
-  const CadastroPage({Key? key}) : super(key: key);
+  const CadastroPage({super.key});
 
   @override
   State<CadastroPage> createState() => _CadastroPageState();
@@ -26,16 +26,16 @@ class _CadastroPageState extends State<CadastroPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: SizedBox(
-        height: _size.height,
-        width: _size.width,
+        height: size.height,
+        width: size.width,
         child: Form(
           key: _cadastroController.formKey,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: _size.width * 0.15),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

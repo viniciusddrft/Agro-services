@@ -1,4 +1,4 @@
-import 'package:agro_services/src/modules/mercadorias/mercadorias_interface.dart';
+import 'package:agro_services/src/modules/mercadorias/tipos_de_mercadorias.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/cadastro/cadastro_page.dart';
@@ -41,7 +41,9 @@ class Routes {
       }
     } else if (settings.name == '/carrinho') {
       return MaterialPageRoute(
-        builder: (BuildContext context) => const CarrinhoPage(),
+        builder: (BuildContext context) => CarrinhoPage(
+          items: settings.arguments as int,
+        ),
       );
     } else {
       return null;

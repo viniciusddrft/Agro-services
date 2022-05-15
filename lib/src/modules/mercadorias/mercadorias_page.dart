@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'mercadorias_interface.dart';
+import 'tipos_de_mercadorias.dart';
 
-class MerchandisePage extends StatefulWidget implements MercadoriasInterface {
-  @override
+class MerchandisePage extends StatefulWidget {
   final TypeOfMerchandise typeOfMerchandise;
 
   const MerchandisePage({required this.typeOfMerchandise, Key? key})

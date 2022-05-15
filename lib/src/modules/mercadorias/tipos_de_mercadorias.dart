@@ -1,0 +1,1 @@
+enum TypeOfMerchandise { produts, services }
