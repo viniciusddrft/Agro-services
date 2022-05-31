@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Form(
         key: _loginController.formKey,
         child: Container(
-          padding: const EdgeInsets.only(top: 60, left: 40, right: 40),
+          padding: const EdgeInsets.only(top: 60, left: 400, right: 400),
           color: Colors.white,
           child: ListView(
             children: <Widget>[
@@ -55,6 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _loginController.textEditingControllerEmail,
                 decoration: const InputDecoration(
                   labelText: "E-mail",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
@@ -62,32 +67,45 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  } else if (value.length < 8) {
-                    return 'Please at least 8 characters';
-                  } else {
-                    return null;
-                  }
-                },
-                controller: _loginController.textEditingControllerPassword,
-                decoration: const InputDecoration(
-                  labelText: "Senha",
-                  labelStyle: TextStyle(
-                    color: Colors.black38,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some text';
+                    } else if (value.length < 8) {
+                      return 'Please at least 8 characters';
+                    } else {
+                      return null;
+                    }
+                  },
+                  controller: _loginController.textEditingControllerPassword,
+                  decoration: const InputDecoration(
+                    labelText: "Senha",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    labelStyle: TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                    ),
                   ),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                style: const TextStyle(fontSize: 20),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
                   onPressed: () => _loginController.login(context),
                   child: const SizedBox(
                     height: 50,
@@ -100,6 +118,11 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
                   onPressed: () => Navigator.pushNamed(context, '/cadastro'),
                   child: const SizedBox(
                     height: 50,
