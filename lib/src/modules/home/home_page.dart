@@ -1,6 +1,7 @@
 import 'package:agro_services/src/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/models/mercadoria_model.dart';
 import '../mercadorias/tipos_de_mercadorias.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -37,35 +38,45 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () => Navigator.pushNamed(context, '/mercadorias',
                   arguments: {'type': TypeOfMerchandise.services}),
               child: const Text('Serviços'),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 400),
+              child: SizedBox(
+                width: 250,
+                height: 40,
+                child: Card(
+                  color: Colors.white,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 5, left: 2),
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              hintText: '',
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         automaticallyImplyLeading: false,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 50),
-            child: SizedBox(
-              width: 250,
-              child: Card(
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: TextFormField(),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(right: 25),
             child: IconButton(
@@ -74,8 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, '/carrinho',
-                arguments: _homeController.numberOfItemsInCart.value),
+            onPressed: () =>
+                Navigator.pushNamed(context, '/carrinho', arguments: {
+              'items': _homeController.numberOfItemsInCart.value,
+              'mercadorias': [Mercadoria()]
+            }),
             icon: const Icon(Icons.shopping_cart),
           ),
           Padding(

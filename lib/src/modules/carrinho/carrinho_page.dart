@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../shared/models/mercadoria_model.dart';
+
 class CarrinhoPage extends StatelessWidget {
   final int items;
-  const CarrinhoPage({required this.items, super.key});
+  final List<Mercadoria> mercadorias;
+  const CarrinhoPage(
+      {required this.items, super.key, required this.mercadorias});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +23,14 @@ class CarrinhoPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Você tem $items no carrinho'),
-            const Text('Items -> {}'),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Center(
-                child: Text('Comprar'),
+            Text('Items -> ${mercadorias.toString()}'),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Center(
+                  child: Text('Comprar'),
+                ),
               ),
             )
           ],

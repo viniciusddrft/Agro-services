@@ -29,6 +29,29 @@ class _CadastroPageState extends State<CadastroPage> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.pushReplacementNamed(context, '/home'),
+              child: const Text('Agro Services'),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: const Padding(
+                padding: EdgeInsets.only(left: 100, right: 50),
+                child: Text('Produtos'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: const Text('Serviços'),
+            )
+          ],
+        ),
+        automaticallyImplyLeading: false,
+      ),
       body: SizedBox(
         height: size.height,
         width: size.width,

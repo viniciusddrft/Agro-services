@@ -40,9 +40,12 @@ class Routes {
         throw Exception('Route bug in -> TypeOfMerchandise');
       }
     } else if (settings.name == '/carrinho') {
+      final Map arguments = settings.arguments as Map;
+
       return MaterialPageRoute(
         builder: (BuildContext context) => CarrinhoPage(
-          items: settings.arguments as int,
+          items: arguments['items'],
+          mercadorias: arguments['mercadorias'],
         ),
       );
     } else {
