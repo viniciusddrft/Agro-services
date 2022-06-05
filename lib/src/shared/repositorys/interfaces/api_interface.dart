@@ -1,3 +1,6 @@
+import 'package:agro_services/src/shared/models/produto_model.dart';
+
+import '../../models/servico_model.dart';
 import '../../services/interfaces/service_web_request_interface.dart';
 
 abstract class ApiInterface {
@@ -11,13 +14,13 @@ abstract class ApiInterface {
 
   void purchase(Map<String, dynamic> json);
 
-  void getProducts(Map<String, dynamic> json);
+  Future<List<Produto>> getProducts();
 
   void addProducts(Map<String, dynamic> json);
 
   void deleteProducts(Map<String, dynamic> json);
 
-  void getServices(Map<String, dynamic> json);
+  Future<List<Servico>> getServices();
 
   void addServices(Map<String, dynamic> json);
 

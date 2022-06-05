@@ -1,12 +1,17 @@
+import 'package:agro_services/src/shared/models/produto_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/models/mercadoria_model.dart';
+import '../../shared/models/servico_model.dart';
 
 class CarrinhoPage extends StatelessWidget {
   final int items;
-  final List<Mercadoria> mercadorias;
+  final List<Produto> produtos;
+  final List<Servico> servicos;
   const CarrinhoPage(
-      {required this.items, super.key, required this.mercadorias});
+      {required this.items,
+      super.key,
+      required this.produtos,
+      required this.servicos});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,8 @@ class CarrinhoPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Você tem $items no carrinho'),
-            Text('Items -> ${mercadorias.toString()}'),
+            Text('Items -> ${produtos.length}'),
+            Text('Items -> ${servicos.length}'),
             SizedBox(
               width: 200,
               child: ElevatedButton(

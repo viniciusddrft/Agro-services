@@ -1,9 +1,6 @@
 import 'package:agro_services/src/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/models/mercadoria_model.dart';
-import '../mercadorias/tipos_de_mercadorias.dart';
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -27,16 +24,14 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Agro Services'),
             ),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/mercadorias',
-                  arguments: {'type': TypeOfMerchandise.produts}),
+              onTap: () => Navigator.pushNamed(context, '/produtospage'),
               child: const Padding(
                 padding: EdgeInsets.only(left: 100, right: 50),
                 child: Text('Produtos'),
               ),
             ),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/mercadorias',
-                  arguments: {'type': TypeOfMerchandise.services}),
+              onTap: () => Navigator.pushNamed(context, '/servicospage'),
               child: const Text('Serviços'),
             ),
             Padding(
@@ -88,7 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () =>
                 Navigator.pushNamed(context, '/carrinho', arguments: {
               'items': _homeController.numberOfItemsInCart.value,
-              'mercadorias': [Mercadoria()]
+              'produtos': _homeController.produtosInCart,
+              'servicos': _homeController.servicosInCart,
             }),
             icon: const Icon(Icons.shopping_cart),
           ),
@@ -143,100 +139,75 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 30),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 150),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
+              FutureBuilder(
+                future: _homeController.getAllprodutos(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 150),
+                      child: GridView.builder(
+                        itemCount: 3,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (BuildContext context, int index) =>
+                            GestureDetector(
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            '/detalheproduto',
+                            arguments: _homeController.produtos[index],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          child: Column(
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
+                              Image.network(
+                                _homeController.produtos[index].imagem,
+                                height: 150,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, '/carrinho',
+                                        arguments: {
+                                          'items': _homeController
+                                              .numberOfItemsInCart.value,
+                                          'produtos':
+                                              _homeController.produtosInCart,
+                                          'servicos':
+                                              _homeController.servicosInCart,
+                                        }),
+                                    child: const Center(
+                                      child: Text('Comprar'),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _homeController.addToCart(
+                                          produto:
+                                              _homeController.produtos[index]);
+                                    },
+                                    child: const Center(
+                                      child: Text('Carrinho'),
+                                    ),
+                                  )
+                                ],
                               )
                             ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 20, top: 100),
@@ -245,100 +216,73 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 30),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 150),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              FutureBuilder(
+                future: _homeController.getAllservicos(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 150),
+                      child: GridView.builder(
+                        itemCount: 3,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (BuildContext context, int index) =>
+                            GestureDetector(
+                          onTap: () => Navigator.pushNamed(
+                              context, '/detalhesservico',
+                              arguments: _homeController.servicos[index]),
+                          child: Column(
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
+                              Image.network(
+                                _homeController.servicos[index].imagem,
+                                height: 150,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, '/carrinho',
+                                        arguments: {
+                                          'items': _homeController
+                                              .numberOfItemsInCart.value,
+                                          'produtos':
+                                              _homeController.produtosInCart,
+                                          'servicos':
+                                              _homeController.servicosInCart,
+                                        }),
+                                    child: const Center(
+                                      child: Text('Comprar'),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _homeController.addToCart(
+                                          servico:
+                                              _homeController.servicos[index]);
+                                    },
+                                    child: const Center(
+                                      child: Text('Carrinho'),
+                                    ),
+                                  )
+                                ],
                               )
                             ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'assets/logo.png',
-                            height: 150,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Comprar'),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _homeController.addToCart();
-                                },
-                                child: const Center(
-                                  child: Text('Carrinho'),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
             ],
           ),

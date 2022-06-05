@@ -1,11 +1,15 @@
-import 'package:agro_services/src/modules/mercadorias/tipos_de_mercadorias.dart';
+import 'package:agro_services/src/modules/all_produtos/produtos_page.dart';
+import 'package:agro_services/src/modules/all_servicos/servicos_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/cadastro/cadastro_page.dart';
 import '../../modules/carrinho/carrinho_page.dart';
+import '../../modules/detalhe_produto/detalhes_produto_page.dart';
+import '../../modules/detalhes_servicos/detalhes_servicos_page.dart';
 import '../../modules/home/home_page.dart';
 import '../../modules/login/login_page.dart';
-import '../../modules/mercadorias/mercadorias_page.dart';
+import '../models/produto_model.dart';
+import '../models/servico_model.dart';
 
 class Routes {
   static Route<dynamic>? routes(RouteSettings settings) {
@@ -21,32 +25,35 @@ class Routes {
       return MaterialPageRoute(
         builder: (BuildContext context) => const CadastroPage(),
       );
-    } else if (settings.name == '/mercadorias') {
-      final Map<String, TypeOfMerchandise> arguments =
-          settings.arguments as Map<String, TypeOfMerchandise>;
-      if (arguments['type'] == TypeOfMerchandise.produts) {
-        return MaterialPageRoute(
-          builder: (BuildContext context) => const MerchandisePage(
-            typeOfMerchandise: TypeOfMerchandise.produts,
-          ),
-        );
-      } else if (arguments['type'] == TypeOfMerchandise.services) {
-        return MaterialPageRoute(
-          builder: (BuildContext context) => const MerchandisePage(
-            typeOfMerchandise: TypeOfMerchandise.services,
-          ),
-        );
-      } else {
-        throw Exception('Route bug in -> TypeOfMerchandise');
-      }
     } else if (settings.name == '/carrinho') {
       final Map arguments = settings.arguments as Map;
 
       return MaterialPageRoute(
         builder: (BuildContext context) => CarrinhoPage(
           items: arguments['items'],
-          mercadorias: arguments['mercadorias'],
+          produtos: arguments['produtos'],
+          servicos: arguments['servicos'],
         ),
+      );
+    } else if (settings.name == '/detalheproduto') {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => DetalhesProdutoPage(
+          produto: settings.arguments as Produto,
+        ),
+      );
+    } else if (settings.name == '/detalhesservico') {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => DetalhesServicoPage(
+          servico: settings.arguments as Servico,
+        ),
+      );
+    } else if (settings.name == '/produtospage') {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => const ProdutosPage(),
+      );
+    } else if (settings.name == '/servicospage') {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => const ServicosPage(),
       );
     } else {
       return null;
