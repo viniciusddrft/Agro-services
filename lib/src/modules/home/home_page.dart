@@ -121,13 +121,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
-                    child: PageView(
-                      controller: _pageController,
-                      children: [
-                        Image.asset('assets/logo.png'),
-                        Image.asset('assets/logo.png'),
-                        Image.asset('assets/logo.png')
-                      ],
+                    child: FutureBuilder(
+                      future: _homeController.getCarrosel(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return PageView(
+                            controller: _pageController,
+                            children: [
+                              for (var image in _homeController.carrosel.images)
+                                Image.network(image.url),
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      },
                     ),
                   ),
                 ),

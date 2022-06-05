@@ -64,6 +64,24 @@ class ApiMock {
 }
 ]
 ''';
+
+  String jsonGetCarrosel() => '''
+
+{
+	"id": 0,
+	"images": [{
+		"id": 0,
+		"url": "https://www.lopes.com.br/blog/wp-content/uploads/2017/01/Casa-de-campo-1.jpg"
+	},{
+		"id": 0,
+		"url": "https://www.lopes.com.br/blog/wp-content/uploads/2017/01/Casa-de-campo-1.jpg"
+	},{
+		"id": 0,
+		"url": "https://www.lopes.com.br/blog/wp-content/uploads/2017/01/Casa-de-campo-1.jpg"
+	}]
+
+}
+''';
 }
 
 

@@ -1,3 +1,4 @@
+import 'package:agro_services/src/shared/models/carrosel_model.dart';
 import 'package:agro_services/src/shared/models/produto_model.dart';
 import 'package:agro_services/src/shared/models/servico_model.dart';
 import 'package:agro_services/src/shared/services/service_web_request_http.dart';
@@ -17,6 +18,7 @@ class HomeController {
 
   late final List<Servico> servicos;
   late final List<Produto> produtos;
+  late final Carrosel carrosel;
 
   final List<Servico> servicosInCart = [];
   final List<Produto> produtosInCart = [];
@@ -35,4 +37,7 @@ class HomeController {
 
   Future<void> getAllservicos() async =>
       servicos = await apiRepository.getServices();
+
+  Future<void> getCarrosel() async =>
+      carrosel = await apiRepository.getCarrosel();
 }

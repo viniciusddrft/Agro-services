@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:agro_services/src/shared/mock/api_mock.dart';
+import 'package:agro_services/src/shared/models/carrosel_model.dart';
 import 'package:agro_services/src/shared/models/produto_model.dart';
 
 import '../models/servico_model.dart';
@@ -14,25 +15,6 @@ class ApiRepository implements ApiInterface {
   const ApiRepository(this.serviceWebRequestInterface);
 
   @override
-  void addProducts(Map<String, dynamic> json) {
-    // TODO: implement addProducts
-  }
-
-  @override
-  void addServices(Map<String, dynamic> json) {
-    // TODO: implement addServices
-  }
-
-  @override
-  void deleteProducts(Map<String, dynamic> json) {
-    // TODO: implement deleteProducts
-  }
-
-  @override
-  void deleteServices(Map<String, dynamic> json) {
-    // TODO: implement deleteServices
-  }
-
   @override
   Future<List<Produto>> getProducts() async {
     /*final ServiceWebResponseInterface respose = await serviceWebRequestInterface
@@ -70,17 +52,10 @@ class ApiRepository implements ApiInterface {
   }
 
   @override
-  void login(Map<String, dynamic> json) {
-    // TODO: implement login
-  }
-
-  @override
-  void purchase(Map<String, dynamic> json) {
-    // TODO: implement purchase
-  }
-
-  @override
-  void register(Map<String, dynamic> json) {
-    // TODO: implement register
+  Future<Carrosel> getCarrosel() async {
+    final String jsonRaw = ApiMock().jsonGetCarrosel();
+    final json = jsonDecode(jsonRaw);
+    final Carrosel carrosel = Carrosel.fromJson(json);
+    return carrosel;
   }
 }
