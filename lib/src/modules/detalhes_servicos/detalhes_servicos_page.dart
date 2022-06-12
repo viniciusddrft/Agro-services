@@ -95,20 +95,44 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 180),
-                child: SizedBox(
-                  height: 50,
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        homeController.addToCart(servico: widget.servico),
-                    child: const Center(
-                      child: Text('Adicionar ao carinho'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 180),
+                    child: SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            homeController.addToCart(servico: widget.servico),
+                        child: const Center(
+                          child: Text('Adicionar ao carinho'),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
+                  Padding(
+                    padding: const EdgeInsets.only(top: 180),
+                    child: SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pushNamed(
+                            context, '/carrinho',
+                            arguments: {
+                              'items': homeController.numberOfItemsInCart.value,
+                              'produtos': homeController.produtosInCart,
+                              'servicos': homeController.servicosInCart,
+                            }),
+                        child: const Center(
+                          child: Text('Adicionar ao carinho'),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),
