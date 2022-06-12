@@ -17,10 +17,32 @@ class CarrinhoPage extends StatefulWidget {
 
 class _CarrinhoPageState extends State<CarrinhoPage> {
   late final List<dynamic> items;
+  List<int> numberInItems = [];
+  var mapNumberinIntems = {};
 
   @override
   void initState() {
-    items = List.from(widget.produtos)..addAll(widget.servicos);
+    List<Produto> produtosClean = widget.produtos.toSet().toList();
+    List<Servico> servicosClean = widget.servicos.toSet().toList();
+
+    items = List.from(produtosClean)..addAll(servicosClean);
+
+    for (Produto produto in widget.produtos) {
+      numberInItems.add(produto.id);
+    }
+
+    for (Servico servico in widget.servicos) {
+      numberInItems.add(servico.id);
+    }
+
+    for (var element in numberInItems) {
+      if (!mapNumberinIntems.containsKey(element)) {
+        mapNumberinIntems[element] = 1;
+      } else {
+        mapNumberinIntems[element] += 1;
+      }
+    }
+
     super.initState();
   }
 
@@ -158,70 +180,71 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          items[index] is Produto
-                              ? Row(
-                                  children: [
-                                    Image.network(items[index].imagem,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? imageChunkEvent) {
-                                      if (imageChunkEvent == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: imageChunkEvent
-                                                      .expectedTotalBytes !=
+                      itemBuilder: (BuildContext context, int index) => items[
+                              index] is Produto
+                          ? Row(
+                              children: [
+                                Image.network(items[index].imagem,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? imageChunkEvent) {
+                                  if (imageChunkEvent == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          imageChunkEvent.expectedTotalBytes !=
                                                   null
                                               ? imageChunkEvent
                                                       .cumulativeBytesLoaded /
                                                   imageChunkEvent
                                                       .expectedTotalBytes!
                                               : null,
-                                        ),
-                                      );
-                                    }),
-                                    Column(
-                                      children: [
-                                        Text(items[index].nome),
-                                        Text(items[index].descricao),
-                                        Text(items[index].peso),
-                                        Text(items[index].tamanho)
-                                      ],
                                     ),
-                                    Text('${items[index].valor}')
-                                  ],
-                                )
-                              : Row(
+                                  );
+                                }),
+                                Column(
                                   children: [
-                                    Image.network(items[index].imagem,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? imageChunkEvent) {
-                                      if (imageChunkEvent == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: imageChunkEvent
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? imageChunkEvent
-                                                      .cumulativeBytesLoaded /
-                                                  imageChunkEvent
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    }),
-                                    Column(
-                                      children: [
-                                        Text(items[index].nome),
-                                        Text(items[index].descricao),
-                                        Text(items[index].fornecedor),
-                                        Text(items[index].contato),
-                                      ],
-                                    ),
-                                    Text('${items[index].valor}')
+                                    Text(items[index].nome),
+                                    Text(items[index].descricao),
+                                    Text(items[index].peso),
+                                    Text(items[index].tamanho),
+                                    Text(mapNumberinIntems[index].toString())
                                   ],
                                 ),
+                                Text('${items[index].valor}')
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Image.network(items[index].imagem,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? imageChunkEvent) {
+                                  if (imageChunkEvent == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          imageChunkEvent.expectedTotalBytes !=
+                                                  null
+                                              ? imageChunkEvent
+                                                      .cumulativeBytesLoaded /
+                                                  imageChunkEvent
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                }),
+                                Column(
+                                  children: [
+                                    Text(items[index].nome),
+                                    Text(items[index].descricao),
+                                    Text(items[index].fornecedor),
+                                    Text(items[index].contato),
+                                  ],
+                                ),
+                                Text('${items[index].valor}')
+                              ],
+                            ),
                     ),
                   )
                 ],
