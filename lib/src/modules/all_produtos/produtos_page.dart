@@ -83,10 +83,21 @@ class _ProdutosPageState extends State<ProdutosPage> {
                       ),
                       child: Column(
                         children: [
-                          Image.network(
-                            homeController.produtos[index].imagem,
-                            height: 150,
-                          ),
+                          Image.network(homeController.produtos[index].imagem,
+                              height: 150, loadingBuilder:
+                                  (BuildContext context, Widget child,
+                                      ImageChunkEvent? imageChunkEvent) {
+                            if (imageChunkEvent == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: imageChunkEvent.expectedTotalBytes !=
+                                        null
+                                    ? imageChunkEvent.cumulativeBytesLoaded /
+                                        imageChunkEvent.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

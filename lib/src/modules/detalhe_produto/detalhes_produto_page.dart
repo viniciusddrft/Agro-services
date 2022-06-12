@@ -65,7 +65,19 @@ class _DetalhesProdutoPageState extends State<DetalhesProdutoPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.network(widget.produto.imagem),
+                child: Image.network(widget.produto.imagem, loadingBuilder:
+                    (BuildContext context, Widget child,
+                        ImageChunkEvent? imageChunkEvent) {
+                  if (imageChunkEvent == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: imageChunkEvent.expectedTotalBytes != null
+                          ? imageChunkEvent.cumulativeBytesLoaded /
+                              imageChunkEvent.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                }),
               ),
               Align(
                 alignment: Alignment.centerLeft,

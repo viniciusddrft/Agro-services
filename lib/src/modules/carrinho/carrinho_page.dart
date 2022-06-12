@@ -26,7 +26,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     final HomeController homeController = HomeController();
 
     return Scaffold(
@@ -150,7 +149,19 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
               itemBuilder: (BuildContext context, int index) {
                 return Row(
                   children: [
-                    Image.network(widget.produtos[index].imagem),
+                    Image.network(widget.produtos[index].imagem, loadingBuilder:
+                        (BuildContext context, Widget child,
+                            ImageChunkEvent? imageChunkEvent) {
+                      if (imageChunkEvent == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: imageChunkEvent.expectedTotalBytes != null
+                              ? imageChunkEvent.cumulativeBytesLoaded /
+                                  imageChunkEvent.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    }),
                     Column(
                       children: [
                         Text(widget.produtos[index].nome),

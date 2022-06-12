@@ -82,10 +82,21 @@ class _ServicosPageState extends State<ServicosPage> {
                           arguments: homeController.servicos[index]),
                       child: Column(
                         children: [
-                          Image.network(
-                            homeController.servicos[index].imagem,
-                            height: 150,
-                          ),
+                          Image.network(homeController.servicos[index].imagem,
+                              height: 150, loadingBuilder:
+                                  (BuildContext context, Widget child,
+                                      ImageChunkEvent? imageChunkEvent) {
+                            if (imageChunkEvent == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: imageChunkEvent.expectedTotalBytes !=
+                                        null
+                                    ? imageChunkEvent.cumulativeBytesLoaded /
+                                        imageChunkEvent.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

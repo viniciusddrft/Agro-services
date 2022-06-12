@@ -66,7 +66,19 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.network(widget.servico.imagem),
+                child: Image.network(widget.servico.imagem, loadingBuilder:
+                    (BuildContext context, Widget child,
+                        ImageChunkEvent? imageChunkEvent) {
+                  if (imageChunkEvent == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: imageChunkEvent.expectedTotalBytes != null
+                          ? imageChunkEvent.cumulativeBytesLoaded /
+                              imageChunkEvent.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                }),
               ),
               Align(
                 alignment: Alignment.centerLeft,

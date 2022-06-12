@@ -154,6 +154,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Image.network(
                                   image.url,
                                   fit: BoxFit.cover,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? imageChunkEvent) {
+                                    if (imageChunkEvent == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: imageChunkEvent
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? imageChunkEvent
+                                                    .cumulativeBytesLoaded /
+                                                imageChunkEvent
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
                                 ),
                             ],
                           );
@@ -198,9 +215,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Column(
                             children: [
                               Image.network(
-                                _homeController.produtos[index].imagem,
-                                height: 150,
-                              ),
+                                  _homeController.produtos[index].imagem,
+                                  height: 150, loadingBuilder:
+                                      (BuildContext context, Widget child,
+                                          ImageChunkEvent? imageChunkEvent) {
+                                if (imageChunkEvent == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: imageChunkEvent.expectedTotalBytes !=
+                                            null
+                                        ? imageChunkEvent
+                                                .cumulativeBytesLoaded /
+                                            imageChunkEvent.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 10, bottom: 10),
@@ -282,9 +312,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Column(
                             children: [
                               Image.network(
-                                _homeController.servicos[index].imagem,
-                                height: 150,
-                              ),
+                                  _homeController.servicos[index].imagem,
+                                  height: 150, loadingBuilder:
+                                      (BuildContext context, Widget child,
+                                          ImageChunkEvent? imageChunkEvent) {
+                                if (imageChunkEvent == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: imageChunkEvent.expectedTotalBytes !=
+                                            null
+                                        ? imageChunkEvent
+                                                .cumulativeBytesLoaded /
+                                            imageChunkEvent.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 10, bottom: 10),
