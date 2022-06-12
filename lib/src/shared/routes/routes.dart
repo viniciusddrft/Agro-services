@@ -30,7 +30,6 @@ class Routes {
 
       return MaterialPageRoute(
         builder: (BuildContext context) => CarrinhoPage(
-          items: arguments['items'],
           produtos: arguments['produtos'],
           servicos: arguments['servicos'],
         ),

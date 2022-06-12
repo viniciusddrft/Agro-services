@@ -64,31 +64,34 @@ class _CadastroPageState extends State<CadastroPage> {
               children: [
                 Row(
                   children: [
-                    Flexible(
-                      flex: 3,
-                      child: TextFormField(
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          } else {
-                            return null;
-                          }
-                        },
-                        controller:
-                            _cadastroController.textEditingControllerName,
-                        decoration: const InputDecoration(
-                          labelText: 'Nome',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20),
+                    SizedBox(
+                      height: 50,
+                      width: 100,
+                      child: SizedBox(
+                        child: TextFormField(
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller:
+                              _cadastroController.textEditingControllerName,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Flexible(
-                      flex: 3,
+                    SizedBox(
+                      height: 50,
+                      width: 100,
                       child: TextFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -111,9 +114,9 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ],
                 ),
-                const Spacer(),
-                Flexible(
-                  flex: 3,
+                SizedBox(
+                  height: 50,
+                  width: 100,
                   child: TextFormField(
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -132,11 +135,11 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ),
                 ),
-                const Spacer(),
                 Row(
                   children: [
-                    Flexible(
-                      flex: 3,
+                    SizedBox(
+                      height: 50,
+                      width: 100,
                       child: TextFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -157,9 +160,9 @@ class _CadastroPageState extends State<CadastroPage> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Flexible(
-                      flex: 3,
+                    SizedBox(
+                      height: 50,
+                      width: 100,
                       child: TextFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -182,9 +185,9 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ],
                 ),
-                const Spacer(),
-                Flexible(
-                  flex: 3,
+                SizedBox(
+                  height: 50,
+                  width: 100,
                   child: TextFormField(
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -211,9 +214,9 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ),
                 ),
-                const Spacer(),
-                Flexible(
-                  flex: 3,
+                SizedBox(
+                  height: 50,
+                  width: 100,
                   child: TextFormField(
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -234,11 +237,11 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ),
                 ),
-                const Spacer(),
                 Row(
                   children: [
-                    Flexible(
-                      flex: 3,
+                    SizedBox(
+                      height: 50,
+                      width: 100,
                       child: TextFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -261,9 +264,9 @@ class _CadastroPageState extends State<CadastroPage> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Flexible(
-                      flex: 3,
+                    SizedBox(
+                      height: 50,
+                      width: 100,
                       child: TextFormField(
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -288,21 +291,18 @@ class _CadastroPageState extends State<CadastroPage> {
                     ),
                   ],
                 ),
-                const Spacer(),
-                Flexible(
-                  flex: 2,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    onPressed: () => _cadastroController.cadastro(context),
-                    child: const SizedBox(
-                      height: 50,
-                      child: Center(
-                        child: Text('Criar conta'),
-                      ),
+                  ),
+                  onPressed: () => _cadastroController.cadastro(context),
+                  child: const SizedBox(
+                    height: 50,
+                    width: 100,
+                    child: Center(
+                      child: Text('Criar conta'),
                     ),
                   ),
                 ),

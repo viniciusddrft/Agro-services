@@ -3,7 +3,7 @@ class Produto {
   final String nome;
   final String peso;
   final String imagem;
-  final double preco;
+  final double valor;
   final String descricao;
   final String tamanho;
 
@@ -12,7 +12,7 @@ class Produto {
       required this.nome,
       required this.peso,
       required this.imagem,
-      required this.preco,
+      required this.valor,
       required this.descricao,
       required this.tamanho});
 
@@ -21,7 +21,7 @@ class Produto {
         nome: json['nome'],
         peso: json['peso'],
         imagem: json['imagem'],
-        preco: json['preco'],
+        valor: json['valor'],
         descricao: json['descricao'],
         tamanho: json['tamanho'],
       );
@@ -31,7 +31,7 @@ class Produto {
         'nome': nome,
         'peso': peso,
         'imagem': imagem,
-        'preco': preco,
+        'valor': valor,
         'descricao': descricao,
         'tamanho': tamanho,
       };

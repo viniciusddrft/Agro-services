@@ -9,7 +9,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final PageController _pageController = PageController(viewportFraction: 0.8);
+  final PageController _pageController = PageController(viewportFraction: 1);
   final HomeController _homeController = HomeController();
 
   @override
@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 250,
                 height: 40,
                 child: Card(
+                  elevation: 5,
                   color: Colors.white,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,11 +57,26 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
+                      Container(
+                        height: 50,
+                        width: 1,
+                        color: Colors.grey.shade300,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 41,
+                        color: Colors.green.shade300,
+                        child: Center(
+                          child: IconButton(
+                            hoverColor: Colors.white,
+                            focusColor: Colors.white,
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
                         ),
                       )
                     ],
@@ -110,14 +126,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 350,
                 child: GestureDetector(
                   onTap: () {
-                    _pageController.animateToPage(1,
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeInOutCubicEmphasized);
-                  },
-                  onDoubleTap: () {
-                    _pageController.animateToPage(0,
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeInOutCubicEmphasized);
+                    if (_pageController.page == 0) {
+                      _pageController.animateToPage(1,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOutCubicEmphasized);
+                    } else if (_pageController.page == 1) {
+                      _pageController.animateToPage(2,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOutCubicEmphasized);
+                    } else if (_pageController.page == 2) {
+                      _pageController.animateToPage(0,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOutCubicEmphasized);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
@@ -130,7 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             controller: _pageController,
                             children: [
                               for (var image in _homeController.carrosel.images)
-                                Image.network(image.url),
+                                Image.network(
+                                  image.url,
+                                  fit: BoxFit.cover,
+                                ),
                             ],
                           );
                         } else {
@@ -151,8 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               FutureBuilder(
                 future: _homeController.getAllprodutos(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 150),
@@ -178,23 +201,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _homeController.produtos[index].imagem,
                                 height: 150,
                               ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: Text(
+                                  _homeController.produtos[index].nome,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pushNamed(
-                                        context, '/carrinho',
-                                        arguments: {
-                                          'items': _homeController
-                                              .numberOfItemsInCart.value,
-                                          'produtos':
-                                              _homeController.produtosInCart,
-                                          'servicos':
-                                              _homeController.servicosInCart,
-                                        }),
-                                    child: const Center(
-                                      child: Text('Comprar'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.pushNamed(
+                                          context, '/carrinho',
+                                          arguments: {
+                                            'items': _homeController
+                                                .numberOfItemsInCart.value,
+                                            'produtos':
+                                                _homeController.produtosInCart,
+                                            'servicos':
+                                                _homeController.servicosInCart,
+                                          }),
+                                      child: const Center(
+                                        child: Text('Comprar'),
+                                      ),
                                     ),
                                   ),
                                   ElevatedButton(
@@ -228,8 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               FutureBuilder(
                 future: _homeController.getAllservicos(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 150),
@@ -253,23 +285,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _homeController.servicos[index].imagem,
                                 height: 150,
                               ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: Text(
+                                  _homeController.servicos[index].nome,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pushNamed(
-                                        context, '/carrinho',
-                                        arguments: {
-                                          'items': _homeController
-                                              .numberOfItemsInCart.value,
-                                          'produtos':
-                                              _homeController.produtosInCart,
-                                          'servicos':
-                                              _homeController.servicosInCart,
-                                        }),
-                                    child: const Center(
-                                      child: Text('Comprar'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.pushNamed(
+                                          context, '/carrinho',
+                                          arguments: {
+                                            'items': _homeController
+                                                .numberOfItemsInCart.value,
+                                            'produtos':
+                                                _homeController.produtosInCart,
+                                            'servicos':
+                                                _homeController.servicosInCart,
+                                          }),
+                                      child: const Center(
+                                        child: Text('Comprar'),
+                                      ),
                                     ),
                                   ),
                                   ElevatedButton(

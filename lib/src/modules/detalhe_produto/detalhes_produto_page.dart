@@ -77,7 +77,7 @@ class _DetalhesProdutoPageState extends State<DetalhesProdutoPage> {
                       Text('Descrição -> ${widget.produto.descricao}'),
                       Text('Peso -> ${widget.produto.peso}'),
                       Text('tamanho -> ${widget.produto.tamanho}'),
-                      Text('preço -> ${widget.produto.preco}'),
+                      Text('preço -> ${widget.produto.valor}'),
                     ],
                   ),
                 ),
