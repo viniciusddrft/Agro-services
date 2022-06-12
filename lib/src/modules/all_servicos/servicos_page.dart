@@ -97,20 +97,32 @@ class _ServicosPageState extends State<ServicosPage> {
                               ),
                             );
                           }),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Text(
+                              homeController.servicos[index].nome,
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pushNamed(
-                                    context, '/carrinho',
-                                    arguments: {
-                                      'items': homeController
-                                          .numberOfItemsInCart.value,
-                                      'produtos': homeController.produtosInCart,
-                                      'servicos': homeController.servicosInCart,
-                                    }),
-                                child: const Center(
-                                  child: Text('Comprar'),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: ElevatedButton(
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, '/carrinho',
+                                      arguments: {
+                                        'items': homeController
+                                            .numberOfItemsInCart.value,
+                                        'produtos':
+                                            homeController.produtosInCart,
+                                        'servicos':
+                                            homeController.servicosInCart,
+                                      }),
+                                  child: const Center(
+                                    child: Text('Comprar'),
+                                  ),
                                 ),
                               ),
                               ElevatedButton(
