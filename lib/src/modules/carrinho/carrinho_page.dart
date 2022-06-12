@@ -17,8 +17,10 @@ class CarrinhoPage extends StatefulWidget {
 
 class _CarrinhoPageState extends State<CarrinhoPage> {
   late final List<dynamic> items;
-  List<int> numberInItems = [];
-  var mapNumberinIntems = {};
+  List<int> numberInItemsProdutos = [];
+  var mapNumberinIntemsProdutos = {};
+  List<int> numberInItemsServicos = [];
+  var mapNumberinIntemsServicos = {};
 
   @override
   void initState() {
@@ -28,18 +30,26 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
     items = List.from(produtosClean)..addAll(servicosClean);
 
     for (Produto produto in widget.produtos) {
-      numberInItems.add(produto.id);
+      numberInItemsProdutos.add(produto.id);
     }
 
     for (Servico servico in widget.servicos) {
-      numberInItems.add(servico.id);
+      numberInItemsServicos.add(servico.id);
     }
 
-    for (var element in numberInItems) {
-      if (!mapNumberinIntems.containsKey(element)) {
-        mapNumberinIntems[element] = 1;
+    for (var element in numberInItemsProdutos) {
+      if (!mapNumberinIntemsProdutos.containsKey(element)) {
+        mapNumberinIntemsProdutos[element] = 1;
       } else {
-        mapNumberinIntems[element] += 1;
+        mapNumberinIntemsProdutos[element] += 1;
+      }
+    }
+
+    for (var element in numberInItemsServicos) {
+      if (!mapNumberinIntemsServicos.containsKey(element)) {
+        mapNumberinIntemsServicos[element] = 1;
+      } else {
+        mapNumberinIntemsServicos[element] += 1;
       }
     }
 
@@ -180,71 +190,76 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) => items[
-                              index] is Produto
-                          ? Row(
-                              children: [
-                                Image.network(items[index].imagem,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? imageChunkEvent) {
-                                  if (imageChunkEvent == null) return child;
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          imageChunkEvent.expectedTotalBytes !=
+                      itemBuilder: (BuildContext context, int index) =>
+                          items[index] is Produto
+                              ? Row(
+                                  children: [
+                                    Image.network(items[index].imagem,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? imageChunkEvent) {
+                                      if (imageChunkEvent == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: imageChunkEvent
+                                                      .expectedTotalBytes !=
                                                   null
                                               ? imageChunkEvent
                                                       .cumulativeBytesLoaded /
                                                   imageChunkEvent
                                                       .expectedTotalBytes!
                                               : null,
+                                        ),
+                                      );
+                                    }),
+                                    Column(
+                                      children: [
+                                        Text(items[index].nome),
+                                        Text(items[index].descricao),
+                                        Text(items[index].peso),
+                                        Text(items[index].tamanho),
+                                        Text(mapNumberinIntemsProdutos[index]
+                                            .toString())
+                                      ],
                                     ),
-                                  );
-                                }),
-                                Column(
-                                  children: [
-                                    Text(items[index].nome),
-                                    Text(items[index].descricao),
-                                    Text(items[index].peso),
-                                    Text(items[index].tamanho),
-                                    Text(mapNumberinIntems[index].toString())
+                                    Text('${items[index].valor}')
                                   ],
-                                ),
-                                Text('${items[index].valor}')
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Image.network(items[index].imagem,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? imageChunkEvent) {
-                                  if (imageChunkEvent == null) return child;
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          imageChunkEvent.expectedTotalBytes !=
+                                )
+                              : Row(
+                                  children: [
+                                    Image.network(items[index].imagem,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? imageChunkEvent) {
+                                      if (imageChunkEvent == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: imageChunkEvent
+                                                      .expectedTotalBytes !=
                                                   null
                                               ? imageChunkEvent
                                                       .cumulativeBytesLoaded /
                                                   imageChunkEvent
                                                       .expectedTotalBytes!
                                               : null,
+                                        ),
+                                      );
+                                    }),
+                                    Column(
+                                      children: [
+                                        Text(items[index].nome),
+                                        Text(items[index].descricao),
+                                        Text(items[index].fornecedor),
+                                        Text(items[index].contato),
+                                        Text(mapNumberinIntemsServicos[index -
+                                                mapNumberinIntemsProdutos
+                                                    .length]
+                                            .toString()),
+                                      ],
                                     ),
-                                  );
-                                }),
-                                Column(
-                                  children: [
-                                    Text(items[index].nome),
-                                    Text(items[index].descricao),
-                                    Text(items[index].fornecedor),
-                                    Text(items[index].contato),
+                                    Text('${items[index].valor}')
                                   ],
                                 ),
-                                Text('${items[index].valor}')
-                              ],
-                            ),
                     ),
                   )
                 ],
