@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../shared/models/produto_model.dart';
 import '../../shared/models/servico_model.dart';
-import '../../shared/repositorys/api_controller.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final List<Produto> produtos;
@@ -21,7 +20,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
   var mapNumberinIntemsProdutos = {};
   List<int> numberInItemsServicos = [];
   var mapNumberinIntemsServicos = {};
-
+  double valueTotal = 0;
   @override
   void initState() {
     List<Produto> produtosClean = widget.produtos.toSet().toList();
@@ -31,10 +30,12 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
 
     for (Produto produto in widget.produtos) {
       numberInItemsProdutos.add(produto.id);
+      valueTotal += produto.valor;
     }
 
     for (Servico servico in widget.servicos) {
       numberInItemsServicos.add(servico.id);
+      valueTotal += servico.valor;
     }
 
     for (var element in numberInItemsProdutos) {
@@ -56,10 +57,26 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
     super.initState();
   }
 
+  double getValor(int length, double price) => price * length;
+
+  void removeItem(Map<dynamic, dynamic> value, int key, double price) =>
+      setState(() {
+        if (value[key] >= 1) {
+          value[key] -= 1;
+          valueTotal -= price;
+        }
+      });
+
+  void addItem(Map<dynamic, dynamic> value, int key, double price) =>
+      setState(() {
+        value[key] += 1;
+        valueTotal += price;
+      });
+
+  void getTotalValue() {}
+
   @override
   Widget build(BuildContext context) {
-    final ApiController apiController = ApiController();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -80,56 +97,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
               onTap: () => Navigator.pushNamed(context, '/servicospage'),
               child: const Text('Serviços'),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 400),
-              child: SizedBox(
-                width: 250,
-                height: 40,
-                child: Card(
-                  elevation: 5,
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 5, left: 2),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              hintText: '',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 1,
-                        color: Colors.grey.shade300,
-                      ),
-                      Container(
-                        height: 50,
-                        width: 41,
-                        color: Colors.green.shade300,
-                        child: Center(
-                          child: IconButton(
-                            hoverColor: Colors.white,
-                            focusColor: Colors.white,
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.search,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
         automaticallyImplyLeading: false,
@@ -141,25 +108,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
               icon: const Icon(Icons.account_circle_rounded),
             ),
           ),
-          IconButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, '/carrinho', arguments: {
-              'items': apiController.numberOfItemsInCart.value,
-              'produtos': apiController.produtosInCart,
-              'servicos': apiController.servicosInCart,
-            }),
-            icon: const Icon(Icons.shopping_cart),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5, right: 20),
-            child: ValueListenableBuilder(
-              valueListenable: apiController.numberOfItemsInCart,
-              builder: (BuildContext context, int value, Widget? child) =>
-                  apiController.numberOfItemsInCart.value > 0
-                      ? Text('$value')
-                      : Container(),
-            ),
-          )
         ],
       ),
       body: items.isNotEmpty
@@ -176,11 +124,19 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Seus itens adicionados ao carrinho'),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Center(
-                            child: Text('Finalizar compra'),
-                          ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                child: const Center(
+                                  child: Text('Finalizar compra'),
+                                ),
+                              ),
+                            ),
+                            Text('Preço total: $valueTotal')
+                          ],
                         )
                       ],
                     ),
@@ -190,76 +146,147 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          items[index] is Produto
-                              ? Row(
-                                  children: [
-                                    Image.network(items[index].imagem,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? imageChunkEvent) {
-                                      if (imageChunkEvent == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: imageChunkEvent
-                                                      .expectedTotalBytes !=
+                      itemBuilder: (BuildContext context, int index) => items[
+                              index] is Produto
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.network(items[index].imagem,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? imageChunkEvent) {
+                                  if (imageChunkEvent == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          imageChunkEvent.expectedTotalBytes !=
                                                   null
                                               ? imageChunkEvent
                                                       .cumulativeBytesLoaded /
                                                   imageChunkEvent
                                                       .expectedTotalBytes!
                                               : null,
-                                        ),
-                                      );
-                                    }),
-                                    Column(
-                                      children: [
-                                        Text(items[index].nome),
-                                        Text(items[index].descricao),
-                                        Text(items[index].peso),
-                                        Text(items[index].tamanho),
-                                        Text(mapNumberinIntemsProdutos[index]
-                                            .toString())
-                                      ],
                                     ),
-                                    Text('${items[index].valor}')
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    Image.network(items[index].imagem,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? imageChunkEvent) {
-                                      if (imageChunkEvent == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: imageChunkEvent
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? imageChunkEvent
-                                                      .cumulativeBytesLoaded /
-                                                  imageChunkEvent
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      );
-                                    }),
-                                    Column(
-                                      children: [
-                                        Text(items[index].nome),
-                                        Text(items[index].descricao),
-                                        Text(items[index].fornecedor),
-                                        Text(items[index].contato),
-                                        Text(mapNumberinIntemsServicos[index -
-                                                mapNumberinIntemsProdutos
-                                                    .length]
-                                            .toString()),
-                                      ],
-                                    ),
-                                    Text('${items[index].valor}')
-                                  ],
+                                  );
+                                }),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 300, bottom: 50),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Titulo :${items[index].nome}'),
+                                      Text(
+                                          'Descrição :${items[index].descricao}'),
+                                      Text('Peso :${items[index].peso}'),
+                                      Text('Tamanho :${items[index].tamanho}'),
+                                    ],
+                                  ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 100),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                removeItem(
+                                                    mapNumberinIntemsProdutos,
+                                                    index,
+                                                    items[index].valor);
+                                              },
+                                              icon: const Icon(Icons.remove)),
+                                          Text(
+                                              'Quantidade :${mapNumberinIntemsProdutos[index]}'),
+                                          IconButton(
+                                              onPressed: () {
+                                                addItem(
+                                                    mapNumberinIntemsProdutos,
+                                                    index,
+                                                    1);
+                                              },
+                                              icon: const Icon(Icons.add)),
+                                        ],
+                                      ),
+                                      Text(
+                                          'preço :${getValor(mapNumberinIntemsProdutos[index], items[index].valor)}'),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.network(items[index].imagem,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? imageChunkEvent) {
+                                  if (imageChunkEvent == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          imageChunkEvent.expectedTotalBytes !=
+                                                  null
+                                              ? imageChunkEvent
+                                                      .cumulativeBytesLoaded /
+                                                  imageChunkEvent
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                }),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 300, bottom: 50),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Nome :${items[index].nome}'),
+                                      Text(
+                                          'Descrição :${items[index].descricao}'),
+                                      Text(
+                                          'Fornecedor :${items[index].fornecedor}'),
+                                      Text('Contato :${items[index].contato}'),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 100),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                removeItem(
+                                                    mapNumberinIntemsServicos,
+                                                    index,
+                                                    items[index].valor);
+                                              },
+                                              icon: const Icon(Icons.remove)),
+                                          Text(
+                                              'Quantidade :${mapNumberinIntemsServicos[index - mapNumberinIntemsProdutos.length]}'),
+                                          IconButton(
+                                              onPressed: () {
+                                                addItem(
+                                                    mapNumberinIntemsServicos,
+                                                    index,
+                                                    items[index].valor);
+                                              },
+                                              icon: const Icon(Icons.add)),
+                                        ],
+                                      ),
+                                      Text(
+                                          'preço :${getValor(mapNumberinIntemsServicos[index - mapNumberinIntemsProdutos.length], items[index].valor)}'),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                     ),
                   )
                 ],
