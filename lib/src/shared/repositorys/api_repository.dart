@@ -12,13 +12,13 @@ class ApiRepository implements ApiInterface {
   @override
   final ServiceWebRequestInterface serviceWebRequestInterface;
 
-  const ApiRepository(this.serviceWebRequestInterface);
+  ApiRepository(this.serviceWebRequestInterface);
 
-  @override
   @override
   Future<List<Produto>> getProducts() async {
     /*final ServiceWebResponseInterface respose = await serviceWebRequestInterface
         .get('http://localhost:8080/api/produto/', headers: {
+      "Accept": "application/json",
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
       "Access-Control-Allow-Credentials":
           "true", // Required for cookies, authorization headers with HTTPS
@@ -58,4 +58,7 @@ class ApiRepository implements ApiInterface {
     final Carrosel carrosel = Carrosel.fromJson(json);
     return carrosel;
   }
+
+  @override
+  Future<bool> isLogged() => Future.delayed(Duration.zero, () => true);
 }

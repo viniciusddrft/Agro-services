@@ -14,4 +14,6 @@ abstract class ApiInterface {
   Future<List<Servico>> getServices();
 
   Future<Carrosel> getCarrosel();
+
+  Future<bool> isLogged();
 }

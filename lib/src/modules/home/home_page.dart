@@ -1,4 +1,4 @@
-import 'package:agro_services/src/modules/home/home_controller.dart';
+import 'package:agro_services/src/shared/repositorys/api_controller.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -10,7 +10,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final PageController _pageController = PageController(viewportFraction: 1);
-  final HomeController _homeController = HomeController();
+  final ApiController _homeController = ApiController();
 
   @override
   Widget build(BuildContext context) {

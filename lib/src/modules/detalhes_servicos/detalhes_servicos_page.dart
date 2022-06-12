@@ -1,4 +1,4 @@
-import 'package:agro_services/src/modules/home/home_controller.dart';
+import 'package:agro_services/src/shared/repositorys/api_controller.dart';
 
 import '../../shared/models/servico_model.dart';
 
@@ -13,7 +13,7 @@ class DetalhesServicoPage extends StatefulWidget {
 }
 
 class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
-  final HomeController homeController = HomeController();
+  final ApiController apiController = ApiController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +35,18 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
           IconButton(
             onPressed: () =>
                 Navigator.pushNamed(context, '/carrinho', arguments: {
-              'items': homeController.numberOfItemsInCart.value,
-              'produtos': homeController.produtosInCart,
-              'servicos': homeController.servicosInCart,
+              'items': apiController.numberOfItemsInCart.value,
+              'produtos': apiController.produtosInCart,
+              'servicos': apiController.servicosInCart,
             }),
             icon: const Icon(Icons.shopping_cart),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5, right: 20),
             child: ValueListenableBuilder(
-              valueListenable: homeController.numberOfItemsInCart,
+              valueListenable: apiController.numberOfItemsInCart,
               builder: (BuildContext context, int value, Widget? child) =>
-                  homeController.numberOfItemsInCart.value > 0
+                  apiController.numberOfItemsInCart.value > 0
                       ? Text('$value')
                       : Container(),
             ),
@@ -105,7 +105,7 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                       width: 200,
                       child: ElevatedButton(
                         onPressed: () =>
-                            homeController.addToCart(servico: widget.servico),
+                            apiController.addToCart(servico: widget.servico),
                         child: const Center(
                           child: Text('Adicionar ao carinho'),
                         ),
@@ -121,12 +121,12 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                         onPressed: () => Navigator.pushNamed(
                             context, '/carrinho',
                             arguments: {
-                              'items': homeController.numberOfItemsInCart.value,
-                              'produtos': homeController.produtosInCart,
-                              'servicos': homeController.servicosInCart,
+                              'items': apiController.numberOfItemsInCart.value,
+                              'produtos': apiController.produtosInCart,
+                              'servicos': apiController.servicosInCart,
                             }),
                         child: const Center(
-                          child: Text('Adicionar ao carinho'),
+                          child: Text('Comprar'),
                         ),
                       ),
                     ),

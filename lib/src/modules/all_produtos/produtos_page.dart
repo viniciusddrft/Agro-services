@@ -1,4 +1,4 @@
-import 'package:agro_services/src/modules/home/home_controller.dart';
+import 'package:agro_services/src/shared/repositorys/api_controller.dart';
 import 'package:flutter/material.dart';
 
 class ProdutosPage extends StatefulWidget {
@@ -9,7 +9,7 @@ class ProdutosPage extends StatefulWidget {
 }
 
 class _ProdutosPageState extends State<ProdutosPage> {
-  final HomeController homeController = HomeController();
+  final ApiController apiController = ApiController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,18 +28,18 @@ class _ProdutosPageState extends State<ProdutosPage> {
           IconButton(
             onPressed: () =>
                 Navigator.pushNamed(context, '/carrinho', arguments: {
-              'items': homeController.numberOfItemsInCart.value,
-              'produtos': homeController.produtosInCart,
-              'servicos': homeController.servicosInCart,
+              'items': apiController.numberOfItemsInCart.value,
+              'produtos': apiController.produtosInCart,
+              'servicos': apiController.servicosInCart,
             }),
             icon: const Icon(Icons.shopping_cart),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5, right: 20),
             child: ValueListenableBuilder(
-              valueListenable: homeController.numberOfItemsInCart,
+              valueListenable: apiController.numberOfItemsInCart,
               builder: (BuildContext context, int value, Widget? child) =>
-                  homeController.numberOfItemsInCart.value > 0
+                  apiController.numberOfItemsInCart.value > 0
                       ? Text('$value')
                       : Container(),
             ),
@@ -59,7 +59,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
             ),
           ),
           FutureBuilder(
-            future: homeController.getAllprodutos(),
+            future: apiController.getAllprodutos(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Padding(
@@ -79,11 +79,11 @@ class _ProdutosPageState extends State<ProdutosPage> {
                       onTap: () => Navigator.pushNamed(
                         context,
                         '/detalheproduto',
-                        arguments: homeController.produtos[index],
+                        arguments: apiController.produtos[index],
                       ),
                       child: Column(
                         children: [
-                          Image.network(homeController.produtos[index].imagem,
+                          Image.network(apiController.produtos[index].imagem,
                               height: 150, loadingBuilder:
                                   (BuildContext context, Widget child,
                                       ImageChunkEvent? imageChunkEvent) {
@@ -101,7 +101,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
                             child: Text(
-                              homeController.produtos[index].nome,
+                              apiController.produtos[index].nome,
                               style: const TextStyle(fontSize: 20),
                             ),
                           ),
@@ -114,12 +114,12 @@ class _ProdutosPageState extends State<ProdutosPage> {
                                   onPressed: () => Navigator.pushNamed(
                                       context, '/carrinho',
                                       arguments: {
-                                        'items': homeController
+                                        'items': apiController
                                             .numberOfItemsInCart.value,
                                         'produtos':
-                                            homeController.produtosInCart,
+                                            apiController.produtosInCart,
                                         'servicos':
-                                            homeController.servicosInCart,
+                                            apiController.servicosInCart,
                                       }),
                                   child: const Center(
                                     child: Text('Comprar'),
@@ -128,8 +128,8 @@ class _ProdutosPageState extends State<ProdutosPage> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  homeController.addToCart(
-                                      produto: homeController.produtos[index]);
+                                  apiController.addToCart(
+                                      produto: apiController.produtos[index]);
                                 },
                                 child: const Center(
                                   child: Text('Carrinho'),

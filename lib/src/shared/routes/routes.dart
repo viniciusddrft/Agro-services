@@ -1,7 +1,7 @@
-import 'package:agro_services/src/modules/all_produtos/produtos_page.dart';
-import 'package:agro_services/src/modules/all_servicos/servicos_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../modules/all_produtos/produtos_page.dart';
+import '../../modules/all_servicos/servicos_page.dart';
 import '../../modules/cadastro/cadastro_page.dart';
 import '../../modules/carrinho/carrinho_page.dart';
 import '../../modules/detalhe_produto/detalhes_produto_page.dart';

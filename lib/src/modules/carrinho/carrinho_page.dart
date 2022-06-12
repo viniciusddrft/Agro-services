@@ -1,8 +1,8 @@
-import 'package:agro_services/src/modules/home/home_controller.dart';
-import 'package:agro_services/src/shared/models/produto_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../shared/models/produto_model.dart';
 import '../../shared/models/servico_model.dart';
+import '../../shared/repositorys/api_controller.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final List<Produto> produtos;
@@ -26,7 +26,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = HomeController();
+    final ApiController apiController = ApiController();
 
     return Scaffold(
       appBar: AppBar(
@@ -112,72 +112,124 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
           IconButton(
             onPressed: () =>
                 Navigator.pushNamed(context, '/carrinho', arguments: {
-              'items': homeController.numberOfItemsInCart.value,
-              'produtos': homeController.produtosInCart,
-              'servicos': homeController.servicosInCart,
+              'items': apiController.numberOfItemsInCart.value,
+              'produtos': apiController.produtosInCart,
+              'servicos': apiController.servicosInCart,
             }),
             icon: const Icon(Icons.shopping_cart),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5, right: 20),
             child: ValueListenableBuilder(
-              valueListenable: homeController.numberOfItemsInCart,
+              valueListenable: apiController.numberOfItemsInCart,
               builder: (BuildContext context, int value, Widget? child) =>
-                  homeController.numberOfItemsInCart.value > 0
+                  apiController.numberOfItemsInCart.value > 0
                       ? Text('$value')
                       : Container(),
             ),
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Text('Carrinho de compras'),
-            Row(
-              children: [
-                const Text('Seus itens adicionados ao carrinho'),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Container(),
-                )
-              ],
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: items.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    Image.network(widget.produtos[index].imagem, loadingBuilder:
-                        (BuildContext context, Widget child,
-                            ImageChunkEvent? imageChunkEvent) {
-                      if (imageChunkEvent == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: imageChunkEvent.expectedTotalBytes != null
-                              ? imageChunkEvent.cumulativeBytesLoaded /
-                                  imageChunkEvent.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    }),
-                    Column(
+      body: items.isNotEmpty
+          ? SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 30, bottom: 30),
+                    child: Text('Carrinho de compras'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.produtos[index].nome),
-                        Text(widget.produtos[index].descricao),
-                        Text(widget.produtos[index].peso),
-                        Text(widget.produtos[index].tamanho)
+                        const Text('Seus itens adicionados ao carrinho'),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Center(
+                            child: Text('Finalizar compra'),
+                          ),
+                        )
                       ],
                     ),
-                    Text('${widget.produtos[index].valor}')
-                  ],
-                );
-              },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          items[index] is Produto
+                              ? Row(
+                                  children: [
+                                    Image.network(items[index].imagem,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? imageChunkEvent) {
+                                      if (imageChunkEvent == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: imageChunkEvent
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? imageChunkEvent
+                                                      .cumulativeBytesLoaded /
+                                                  imageChunkEvent
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    }),
+                                    Column(
+                                      children: [
+                                        Text(items[index].nome),
+                                        Text(items[index].descricao),
+                                        Text(items[index].peso),
+                                        Text(items[index].tamanho)
+                                      ],
+                                    ),
+                                    Text('${items[index].valor}')
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Image.network(items[index].imagem,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? imageChunkEvent) {
+                                      if (imageChunkEvent == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: imageChunkEvent
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? imageChunkEvent
+                                                      .cumulativeBytesLoaded /
+                                                  imageChunkEvent
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    }),
+                                    Column(
+                                      children: [
+                                        Text(items[index].nome),
+                                        Text(items[index].descricao),
+                                        Text(items[index].fornecedor),
+                                        Text(items[index].contato),
+                                      ],
+                                    ),
+                                    Text('${items[index].valor}')
+                                  ],
+                                ),
+                    ),
+                  )
+                ],
+              ),
             )
-          ],
-        ),
-      ),
+          : const Center(
+              child: Text('Seu carrinho está vazio'),
+            ),
     );
   }
 }

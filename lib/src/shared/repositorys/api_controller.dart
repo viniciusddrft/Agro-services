@@ -4,14 +4,14 @@ import 'package:agro_services/src/shared/models/servico_model.dart';
 import 'package:agro_services/src/shared/services/service_web_request_http.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/repositorys/api_repository.dart';
+import 'api_repository.dart';
 
-class HomeController {
-  static final HomeController _instancia = HomeController._();
+class ApiController {
+  static final ApiController _instancia = ApiController._();
 
-  HomeController._();
+  ApiController._();
 
-  factory HomeController() => _instancia;
+  factory ApiController() => _instancia;
 
   final ApiRepository apiRepository = ApiRepository(ServiceWebHttp());
   final ValueNotifier<int> numberOfItemsInCart = ValueNotifier<int>(0);
@@ -25,6 +25,7 @@ class HomeController {
 
   void addToCart({Produto? produto, Servico? servico}) {
     numberOfItemsInCart.value++;
+
     if (produto != null) {
       produtosInCart.add(produto);
     } else if (servico != null) {
