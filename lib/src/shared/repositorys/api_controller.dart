@@ -26,10 +26,20 @@ class ApiController {
   void addToCart({Produto? produto, Servico? servico}) {
     numberOfItemsInCart.value++;
 
-    if (produto != null) {
+    if (produto is Produto) {
       produtosInCart.add(produto);
-    } else if (servico != null) {
+    } else if (servico is Servico) {
       servicosInCart.add(servico);
+    }
+  }
+
+  void removeToCart({Produto? produto, Servico? servico}) {
+    numberOfItemsInCart.value--;
+
+    if (produto is Produto) {
+      produtosInCart.remove(produto);
+    } else if (servico is Servico) {
+      servicosInCart.remove(servico);
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../shared/models/produto_model.dart';
 import '../../shared/models/servico_model.dart';
+import '../../shared/repositorys/api_controller.dart';
 
 class CarrinhoPage extends StatefulWidget {
   final List<Produto> produtos;
@@ -15,18 +16,22 @@ class CarrinhoPage extends StatefulWidget {
 }
 
 class _CarrinhoPageState extends State<CarrinhoPage> {
-  late final List<dynamic> items;
+  final ApiController apiController = ApiController();
+
   List<int> numberInItemsProdutos = [];
   var mapNumberinIntemsProdutos = {};
   List<int> numberInItemsServicos = [];
   var mapNumberinIntemsServicos = {};
   double valueTotal = 0;
+  Map numberServicesStack = {};
+  Map numberProdutosStack = {};
+  late List<Produto> produtosClean;
+  late List<Servico> servicosClean;
+
   @override
   void initState() {
-    List<Produto> produtosClean = widget.produtos.toSet().toList();
-    List<Servico> servicosClean = widget.servicos.toSet().toList();
-
-    items = List.from(produtosClean)..addAll(servicosClean);
+    produtosClean = widget.produtos.toSet().toList();
+    servicosClean = widget.servicos.toSet().toList();
 
     for (Produto produto in widget.produtos) {
       numberInItemsProdutos.add(produto.id);
@@ -52,28 +57,51 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
       } else {
         mapNumberinIntemsServicos[element] += 1;
       }
+
+      super.initState();
     }
 
-    super.initState();
+    List valuesServices = mapNumberinIntemsServicos.values.toList();
+
+    for (int i = 0; i != valuesServices.length; i++) {
+      numberServicesStack[i] = valuesServices[i];
+    }
+
+    List valuesProdutos = mapNumberinIntemsProdutos.values.toList();
+
+    for (int i = 0; i != valuesProdutos.length; i++) {
+      numberProdutosStack[i] = valuesProdutos[i];
+    }
   }
 
   double getValor(int length, double price) => price * length;
 
-  void removeItem(Map<dynamic, dynamic> value, int key, double price) =>
-      setState(() {
-        if (value[key] >= 1) {
-          value[key] -= 1;
-          valueTotal -= price;
+  void addProduto(Produto produto, int index) => setState(() {
+        numberProdutosStack[index] += 1;
+        apiController.addToCart(produto: produto);
+        valueTotal += produto.valor;
+      });
+
+  void addServico(Servico servico, int index) => setState(() {
+        numberServicesStack[index] += 1;
+        apiController.addToCart(servico: servico);
+        valueTotal += servico.valor;
+      });
+
+  void removeProduto(Produto produto, int index) => setState(() {
+        if (numberProdutosStack[index] >= 1) {
+          numberProdutosStack[index] -= 1;
+          apiController.removeToCart(produto: produto);
+          valueTotal -= produto.valor;
         }
       });
-
-  void addItem(Map<dynamic, dynamic> value, int key, double price) =>
-      setState(() {
-        value[key] += 1;
-        valueTotal += price;
+  void removeSevice(Servico servico, int index) => setState(() {
+        if (numberServicesStack[index] >= 1) {
+          numberServicesStack[index] -= 1;
+          apiController.removeToCart(servico: servico);
+          valueTotal -= servico.valor;
+        }
       });
-
-  void getTotalValue() {}
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +138,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
           ),
         ],
       ),
-      body: items.isNotEmpty
+      body: servicosClean.isNotEmpty || produtosClean.isNotEmpty
           ? SingleChildScrollView(
               child: Column(
                 children: [
@@ -128,10 +156,19 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(bottom: 12),
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Center(
-                                  child: Text('Finalizar compra'),
+                              child: SizedBox(
+                                height: 50,
+                                width: 200,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Center(
+                                    child: Text('Finalizar compra'),
+                                  ),
                                 ),
                               ),
                             ),
@@ -145,148 +182,139 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 100),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) => items[
-                              index] is Produto
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      itemCount: numberProdutosStack.length,
+                      itemBuilder: (BuildContext context, int index) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.network(produtosClean[index].imagem,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? imageChunkEvent) {
+                            if (imageChunkEvent == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: imageChunkEvent.expectedTotalBytes !=
+                                        null
+                                    ? imageChunkEvent.cumulativeBytesLoaded /
+                                        imageChunkEvent.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          }),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 300, bottom: 50),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Image.network(items[index].imagem,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? imageChunkEvent) {
-                                  if (imageChunkEvent == null) return child;
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          imageChunkEvent.expectedTotalBytes !=
-                                                  null
-                                              ? imageChunkEvent
-                                                      .cumulativeBytesLoaded /
-                                                  imageChunkEvent
-                                                      .expectedTotalBytes!
-                                              : null,
-                                    ),
-                                  );
-                                }),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 300, bottom: 50),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Titulo :${items[index].nome}'),
-                                      Text(
-                                          'Descrição :${items[index].descricao}'),
-                                      Text('Peso :${items[index].peso}'),
-                                      Text('Tamanho :${items[index].tamanho}'),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 100),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                removeItem(
-                                                    mapNumberinIntemsProdutos,
-                                                    index,
-                                                    items[index].valor);
-                                              },
-                                              icon: const Icon(Icons.remove)),
-                                          Text(
-                                              'Quantidade :${mapNumberinIntemsProdutos[index]}'),
-                                          IconButton(
-                                              onPressed: () {
-                                                addItem(
-                                                    mapNumberinIntemsProdutos,
-                                                    index,
-                                                    1);
-                                              },
-                                              icon: const Icon(Icons.add)),
-                                        ],
-                                      ),
-                                      Text(
-                                          'preço :${getValor(mapNumberinIntemsProdutos[index], items[index].valor)}'),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.network(items[index].imagem,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? imageChunkEvent) {
-                                  if (imageChunkEvent == null) return child;
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      value:
-                                          imageChunkEvent.expectedTotalBytes !=
-                                                  null
-                                              ? imageChunkEvent
-                                                      .cumulativeBytesLoaded /
-                                                  imageChunkEvent
-                                                      .expectedTotalBytes!
-                                              : null,
-                                    ),
-                                  );
-                                }),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 300, bottom: 50),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Nome :${items[index].nome}'),
-                                      Text(
-                                          'Descrição :${items[index].descricao}'),
-                                      Text(
-                                          'Fornecedor :${items[index].fornecedor}'),
-                                      Text('Contato :${items[index].contato}'),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 100),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                removeItem(
-                                                    mapNumberinIntemsServicos,
-                                                    index,
-                                                    items[index].valor);
-                                              },
-                                              icon: const Icon(Icons.remove)),
-                                          Text(
-                                              'Quantidade :${mapNumberinIntemsServicos[index - mapNumberinIntemsProdutos.length]}'),
-                                          IconButton(
-                                              onPressed: () {
-                                                addItem(
-                                                    mapNumberinIntemsServicos,
-                                                    index,
-                                                    items[index].valor);
-                                              },
-                                              icon: const Icon(Icons.add)),
-                                        ],
-                                      ),
-                                      Text(
-                                          'preço :${getValor(mapNumberinIntemsServicos[index - mapNumberinIntemsProdutos.length], items[index].valor)}'),
-                                    ],
-                                  ),
-                                )
+                                Text('Titulo :${produtosClean[index].nome}'),
+                                Text(
+                                    'Descrição :${produtosClean[index].descricao}'),
+                                Text('Peso :${produtosClean[index].peso}'),
+                                Text(
+                                    'Tamanho :${produtosClean[index].tamanho}'),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 100),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          removeProduto(
+                                              produtosClean[index], index);
+                                        },
+                                        icon: const Icon(Icons.remove)),
+                                    Text(
+                                        'Quantidade :${numberProdutosStack[index]}'),
+                                    IconButton(
+                                        onPressed: () {
+                                          addProduto(
+                                              produtosClean[index], index);
+                                        },
+                                        icon: const Icon(Icons.add)),
+                                  ],
+                                ),
+                                Text(
+                                    'preço :${getValor(numberProdutosStack[index], produtosClean[index].valor)}'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 100),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: numberInItemsServicos.length,
+                      itemBuilder: (BuildContext context, int index) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.network(servicosClean[index].imagem,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? imageChunkEvent) {
+                            if (imageChunkEvent == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: imageChunkEvent.expectedTotalBytes !=
+                                        null
+                                    ? imageChunkEvent.cumulativeBytesLoaded /
+                                        imageChunkEvent.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          }),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(right: 300, bottom: 50),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Nome :${servicosClean[index].nome}'),
+                                Text(
+                                    'Descrição :${servicosClean[index].descricao}'),
+                                Text(
+                                    'Fornecedor :${servicosClean[index].fornecedor}'),
+                                Text(
+                                    'Contato :${servicosClean[index].contato}'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 100),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          removeSevice(
+                                              servicosClean[index], index);
+                                        },
+                                        icon: const Icon(Icons.remove)),
+                                    Text(
+                                        'Quantidade :${numberServicesStack[index]}'),
+                                    IconButton(
+                                        onPressed: () {
+                                          addServico(
+                                              servicosClean[index], index);
+                                        },
+                                        icon: const Icon(Icons.add)),
+                                  ],
+                                ),
+                                Text(
+                                    'preço :${getValor(numberServicesStack[index], servicosClean[index].valor)}'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
