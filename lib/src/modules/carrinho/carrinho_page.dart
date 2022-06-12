@@ -165,7 +165,17 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () => apiController
+                                      .isLogged()
+                                      .then((bool value) {
+                                    if (value) {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/payment');
+                                    } else {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/cadastro');
+                                    }
+                                  }),
                                   child: const Center(
                                     child: Text('Finalizar compra'),
                                   ),

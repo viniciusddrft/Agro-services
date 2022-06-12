@@ -1,3 +1,4 @@
+import 'package:agro_services/src/modules/payment/payment_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/all_produtos/produtos_page.dart';
@@ -53,6 +54,10 @@ class Routes {
     } else if (settings.name == '/servicospage') {
       return MaterialPageRoute(
         builder: (BuildContext context) => const ServicosPage(),
+      );
+    } else if (settings.name == '/payment') {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => const PaymentPage(),
       );
     } else {
       return null;

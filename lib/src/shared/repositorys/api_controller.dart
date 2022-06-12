@@ -43,6 +43,8 @@ class ApiController {
     }
   }
 
+  Future<bool> isLogged() => apiRepository.isLogged();
+
   Future<void> getAllprodutos() async =>
       produtos = await apiRepository.getProducts();
 
