@@ -21,7 +21,8 @@ class LoginController {
 
   void login(BuildContext context) {
     if (formKey.currentState!.validate()) {
-      //apiRepository.login();
+      apiRepository.login(
+          textEditingControllerEmail.text, textEditingControllerPassword.text);
       Navigator.pushNamed(context, '/home');
     }
   }

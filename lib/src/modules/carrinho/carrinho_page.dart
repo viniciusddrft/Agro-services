@@ -173,7 +173,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                           context, '/payment');
                                     } else {
                                       Navigator.pushReplacementNamed(
-                                          context, '/cadastro');
+                                          context, '/login');
                                     }
                                   }),
                                   child: const Center(

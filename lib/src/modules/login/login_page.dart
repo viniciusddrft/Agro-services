@@ -75,7 +75,6 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
-                    // autofocus: true;
                     keyboardType: TextInputType.emailAddress,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {

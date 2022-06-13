@@ -16,4 +16,9 @@ abstract class ApiInterface {
   Future<Carrosel> getCarrosel();
 
   Future<bool> isLogged();
+
+  void login(String email, String senha);
+
+  void cadastro(String nome, String lastName, String password, String email,
+      String cpf, String adress, String phone, String dataNascimento);
 }

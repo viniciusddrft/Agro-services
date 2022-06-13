@@ -286,6 +286,7 @@ class _CadastroPageState extends State<CadastroPage> {
                           height: 50,
                           width: 300,
                           child: TextFormField(
+                            obscureText: true,
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -312,6 +313,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         height: 50,
                         width: 300,
                         child: TextFormField(
+                          obscureText: true,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter some text';
