@@ -88,9 +88,9 @@ class _DetalhesServicoPageState extends State<DetalhesServicoPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Descrição -> ${widget.servico.descricao}'),
-                      Text('Peso -> ${widget.servico.fornecedor}'),
-                      Text('tamanho -> ${widget.servico.contato}'),
-                      Text('preço -> ${widget.servico.valor}'),
+                      Text('Fornecedor -> ${widget.servico.fornecedor}'),
+                      Text('Contato -> ${widget.servico.contato}'),
+                      Text('Preço -> ${widget.servico.valor}'),
                     ],
                   ),
                 ),
